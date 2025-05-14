@@ -28,7 +28,7 @@ const AddToCartButton = ({ productId }: AddToCartButtonProps) => {
   return (
     <div className="flex items-center gap-3">
       <button
-        className="btn bg-amber-500 transform hover:-translate-y-0.5 hover:scale-110"
+        className="btn bg-amber-500 transform hover:scale-105 transition-transform duration-200"
         onClick={addToCart}
         disabled={isLoading}
       >
