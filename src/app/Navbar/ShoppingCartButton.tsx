@@ -9,12 +9,12 @@ interface ShoppingCartButtonProps {
 }
 
 const ShoppingCartButton = ({ cart }: ShoppingCartButtonProps) => {
-    function closeDropdown() {
-        const elem = document.activeElement as HTMLElement;
-        if (elem) {
-            elem.blur();
-        }
+  function closeDropdown() {
+    const elem = document.activeElement as HTMLElement;
+    if (elem) {
+      elem.blur();
     }
+  }
   return (
     <div className="dropdown dropdown-end ">
       <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -46,7 +46,11 @@ const ShoppingCartButton = ({ cart }: ShoppingCartButtonProps) => {
           <span className="text-lg font-bold">{cart?.size || 0} Items</span>
           <span>Subtotal: {formatPrice(cart?.subtotal || 0)}</span>
           <div className="card-actions">
-            <Link href={"/cart"} className="btn btn-primary btn-block" onClick={closeDropdown}>
+            <Link
+              href={"/cart"}
+              className="btn btn-primary btn-block"
+              onClick={closeDropdown}
+            >
               View cart
             </Link>
           </div>
