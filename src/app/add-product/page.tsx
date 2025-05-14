@@ -1,0 +1,75 @@
+import prisma from "@/lib/db/prisma";
+import { redirect } from "next/navigation";
+import FormSubmitButton from "@/component/FormSubmitButton";
+
+export const metadata = {
+    title: "Add Product - Flowmazon",
+}
+
+async function addProduct(formData: FormData ) {
+    "use server"
+
+    const name = formData.get("name")?.toString();
+    const description = formData.get("description")?.toString();
+    const imageUrl = formData.get("imageUrl")?.toString();
+    const price = Number(formData.get("price") || 0);
+
+    if (!name || !description || !imageUrl || !price) {
+        throw Error("Missing required fields");
+    }
+
+    await prisma.product.create({
+        data: {
+            name,
+            description,
+            imageUrl,
+            price
+        },
+    })
+
+    redirect('/')
+}
+
+const AddProduct = () => {
+
+  return (
+    <div>
+      <h1 className="text-2xl font-semibold mb-4">Add Product</h1>
+      <form action={addProduct}>
+        <input
+          type="text"
+          placeholder="Product Name"
+          className="mb-3 w-full input input-bordered"
+          name="name"
+          required
+        />
+        <textarea
+          name="description"
+          required
+          placeholder="Description"
+          className="mb-3 w-full textarea textarea-bordered"
+        />
+
+        <input
+          name="imageUrl"
+          placeholder="Image URL"
+          required
+          type="url"
+          className="mb-3 w-full input input-bordered"
+        />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          required
+          className="mb-3 w-full input input-bordered"
+        />
+        <FormSubmitButton className="btn-block">
+            Add Product
+        </FormSubmitButton>
+      </form>
+    </div>
+  );
+};
+
+export default AddProduct;
