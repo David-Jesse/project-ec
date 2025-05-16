@@ -1,6 +1,9 @@
 import prisma from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import FormSubmitButton from "@/component/FormSubmitButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+
 
 export const metadata = {
     title: "Add Product - Flowmazon",
@@ -30,7 +33,12 @@ async function addProduct(formData: FormData ) {
     redirect('/')
 }
 
-const AddProduct = () => {
+const AddProduct = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/login");
+  }
 
   return (
     <div>
@@ -64,7 +72,7 @@ const AddProduct = () => {
           required
           className="mb-3 w-full input input-bordered"
         />
-        <FormSubmitButton className="btn-block">
+        <FormSubmitButton className="btn-block bg-amber-500 transition-colors hover:bg-amber-600">
             Add Product
         </FormSubmitButton>
       </form>

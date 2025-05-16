@@ -1,9 +1,8 @@
 import ProductCard from "@/component/ProductCard";
 import prisma from "@/lib/db/prisma";
 import Image from "next/image";
-import Link
+import Link from "next/link";
 
-from "next/link";
 export default async function Home() {
   const products = await prisma.product.findMany({
     orderBy: {
@@ -26,7 +25,7 @@ export default async function Home() {
           <div>
             <h1 className="text-5xl font-bold">{products[0].name}</h1>
             <p className="py-6 ">{products[0].description}</p>
-            <Link href={`/product/${products[0].id}`} className="btn-primary btn">
+            <Link href={`/product/${products[0].id}`} className="bg-amber-500 transition-colors hover:bg-amber-600 btn">
               Check it out
             </Link>
           </div>
@@ -34,7 +33,7 @@ export default async function Home() {
       </div>
 
       <div className="my-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {products.slice(1).map(product => (
+        {products.slice(1).map((product: { id: string; name: string; createdAt: Date; updatedAt: Date; description: string; imageUrl: string; price: number; }) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>

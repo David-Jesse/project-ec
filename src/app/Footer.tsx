@@ -3,7 +3,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-neutral p-10 text-neutral-content">
-      <div className="footer mx-auto max-w-7xl">
+      <div className="footer mx-auto max-w-7xl flex justify-between">
         <div className="space-y-2">
           <span className="footer-title">Services</span>
           <a className="link-hover link transition hover:text-primary">
