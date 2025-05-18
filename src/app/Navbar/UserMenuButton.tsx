@@ -1,16 +1,32 @@
 "use client";
 
-import { Session } from "next-auth";
 import Image from "next/image";
 import profilePicPlaceholder from "../assets/profilePicPlaceholder.png";
-import { signIn, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-interface UserMenuButtonProps {
-  session: Session | null;
-}
 
-const UserMenuButton = ({ session }: UserMenuButtonProps) => {
+const UserMenuButton = () => {
+  const {data: session, status} = useSession();
   const user = session?.user;
+  const router = useRouter();
+
+  const handleSignIn = () => {
+    router.push("/login");
+  }
+
+  if (status === "loading") {
+    return (
+      <div className="btn btn-ghost btn-circle avatar loading-skeleton w-10 h-10 rounded-full"/>
+    )
+  }
+
+  const handleSignOut = async () => {
+    await signOut({
+      redirect: true,
+      callbackUrl: "/",
+    })
+  }
 
   return (
     <div className="dropdown dropdown-end mt-2">
@@ -45,11 +61,11 @@ const UserMenuButton = ({ session }: UserMenuButtonProps) => {
       >
         <li>
           {user ? (
-            <button onClick={() => signOut({ callbackUrl: "/" })}>
+            <button onClick={handleSignOut}>
               Sign Out
             </button>
           ) : (
-            <button onClick={() => signIn("/login")}>Sign In</button>
+            <button onClick={handleSignIn}>Sign In</button>
           )}
         </li>
       </ul>

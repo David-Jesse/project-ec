@@ -16,7 +16,7 @@ interface NavbarProps {
   session: Session | null;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ cart, session }) => {
+const Navbar: React.FC<NavbarProps> = ({ cart}) => {
   const pathname = usePathname();
 
   const isAuthPage = pathname === "/login" || pathname === "/register";
@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ cart, session }) => {
             <div className="flex flex-row w-full gap-2 sm:w-auto sm:items-center sm:justify-center pt-2">
               <SearchForm />
               <ShoppingCartButton cart={cart}/>
-              <UserMenuButton session={session}/>
+              <UserMenuButton/>
             </div>
           </>
         )}

@@ -39,7 +39,7 @@ const RegisterForm = () => {
         throw new Error(data.error || "Something went wrong");
       }
 
-      router.push("/auth/login?success=Account created successfully");
+      router.push("/login");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);

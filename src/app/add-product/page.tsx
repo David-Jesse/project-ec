@@ -4,40 +4,45 @@ import FormSubmitButton from "@/component/FormSubmitButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 
-
 export const metadata = {
-    title: "Add Product - Flowmazon",
-}
+  title: "Add Product - Flowmazon",
+};
 
-async function addProduct(formData: FormData ) {
-    "use server"
+async function addProduct(formData: FormData) {
+  "use server";
 
-    const name = formData.get("name")?.toString();
-    const description = formData.get("description")?.toString();
-    const imageUrl = formData.get("imageUrl")?.toString();
-    const price = Number(formData.get("price") || 0);
+  const session = await getServerSession(authOptions);
 
-    if (!name || !description || !imageUrl || !price) {
-        throw Error("Missing required fields");
-    }
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  }
 
-    await prisma.product.create({
-        data: {
-            name,
-            description,
-            imageUrl,
-            price
-        },
-    })
+  const name = formData.get("name")?.toString();
+  const description = formData.get("description")?.toString();
+  const imageUrl = formData.get("imageUrl")?.toString();
+  const price = Number(formData.get("price") || 0);
 
-    redirect('/')
+  if (!name || !description || !imageUrl || !price) {
+    throw Error("Missing required fields");
+  }
+
+  await prisma.product.create({
+    data: {
+      name,
+      description,
+      imageUrl,
+      price,
+    },
+  });
+
+  redirect("/");
 }
 
 const AddProduct = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    redirect("/api/auth/signin?callbackUrl=/add-product");
   }
 
   return (
@@ -73,7 +78,7 @@ const AddProduct = async () => {
           className="mb-3 w-full input input-bordered"
         />
         <FormSubmitButton className="btn-block bg-amber-500 transition-colors hover:bg-amber-600">
-            Add Product
+          Add Product
         </FormSubmitButton>
       </form>
     </div>

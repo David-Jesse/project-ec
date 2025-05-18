@@ -48,7 +48,7 @@ const ShoppingCartButton = ({ cart }: ShoppingCartButtonProps) => {
           <div className="card-actions">
             <Link
               href={"/cart"}
-              className="btn btn-primary btn-block"
+              className="btn bg-amber-500 btn-block"
               onClick={closeDropdown}
             >
               View cart
