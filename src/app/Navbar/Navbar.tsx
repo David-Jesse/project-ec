@@ -28,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({ cart}) => {
       >
         {isAuthPage ? (
           <div className="flex justify-center">
-            <Link href="/" className="btn btn-ghost text-ml normal-case">
+            <Link href="/" className="btn btn-ghost text-xl normal-case">
               <Image src={logo} alt="Flowmazon Logo" height={40} width={40} />
               Flowmazon
             </Link>

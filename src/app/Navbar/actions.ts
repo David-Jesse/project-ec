@@ -6,6 +6,10 @@ export async function searchProducts(formData: FormData) {
   const searchQuery = formData.get("searchQuery")?.toString();
 
   if (searchQuery) {
-    redirect("/search?query=" + searchQuery);
+    const encoded = encodeURIComponent(searchQuery);
+    redirect(`/search?query=${encoded}`);
+  } else {
+    // Optional: redirect to a default page or show an error
+    redirect("/not-found");
   }
 }

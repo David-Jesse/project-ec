@@ -28,16 +28,24 @@ const PaginationBar = ({ currentPage, totalPages }: PaginationBarProps) => {
       <div className="join hidden sm:block">{numberedPageItems}</div>
       <div className="join block sm:hidden">
         {currentPage > 1 && (
-          <Link href={`?page=${currentPage - 1}`} className="btn join-item">
-            {"<"}
+          <Link
+            href={`?page=${currentPage - 1}`}
+            className="btn join-item"
+            aria-label="Previous page"
+          >
+            <span aria-hidden="true">{"<"}</span>
           </Link>
         )}
         <button className="btn join-item pointer-events-none">
           page {currentPage}
         </button>
         {currentPage < totalPages && (
-          <Link href={`?page=${currentPage + 1}`} className="btn join-item">
-            {">"}
+          <Link
+            href={`?page=${currentPage + 1}`}
+            className="btn join-item"
+            aria-label="Next page"
+          >
+            <span aria-hidden="true">{">"}</span>
           </Link>
         )}
       </div>

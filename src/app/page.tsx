@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface HomeProps {
-  searchParams: { page: string };
+  searchParams: { page?: string };
 }
 
 export default async function Home({
