@@ -9,6 +9,14 @@ module.exports = {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require("daisyui"),
   ],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ["Geist", "sans serif"],
+        mono: ["Geist Mono", "monospace"],
+      }
+    },
+  },
   daisyui: {
     theme: [
       {

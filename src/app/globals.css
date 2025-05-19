@@ -1,3 +1,7 @@
- @import "tailwindcss"; 
- @plugin "daisyui"; 
 
+@import "tailwindcss"; 
+@plugin "daisyui"; 
+
+body {
+    font-family: 'Geist', sans-serif;
+}

@@ -1,36 +1,50 @@
 import prisma from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import FormSubmitButton from "@/component/FormSubmitButton";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
 
 export const metadata = {
-    title: "Add Product - Flowmazon",
+  title: "Add Product - Flowmazon",
+};
+
+async function addProduct(formData: FormData) {
+  "use server";
+
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  }
+
+  const name = formData.get("name")?.toString();
+  const description = formData.get("description")?.toString();
+  const imageUrl = formData.get("imageUrl")?.toString();
+  const rawPrice = formData.get("price");
+  const price = rawPrice === null ? NaN : Number(rawPrice);
+
+  if (!name || !description || !imageUrl || !Number.isFinite(price)) {
+     throw Error("Missing required fields");
+   }
+
+  await prisma.product.create({
+    data: {
+      name,
+      description,
+      imageUrl,
+      price,
+    },
+  });
+
+  redirect("/");
 }
 
-async function addProduct(formData: FormData ) {
-    "use server"
+const AddProduct = async () => {
+  const session = await getServerSession(authOptions);
 
-    const name = formData.get("name")?.toString();
-    const description = formData.get("description")?.toString();
-    const imageUrl = formData.get("imageUrl")?.toString();
-    const price = Number(formData.get("price") || 0);
-
-    if (!name || !description || !imageUrl || !price) {
-        throw Error("Missing required fields");
-    }
-
-    await prisma.product.create({
-        data: {
-            name,
-            description,
-            imageUrl,
-            price
-        },
-    })
-
-    redirect('/')
-}
-
-const AddProduct = () => {
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/add-product");
+  }
 
   return (
     <div>
@@ -39,7 +53,7 @@ const AddProduct = () => {
         <input
           type="text"
           placeholder="Product Name"
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
           name="name"
           required
         />
@@ -47,7 +61,7 @@ const AddProduct = () => {
           name="description"
           required
           placeholder="Description"
-          className="mb-3 w-full textarea textarea-bordered"
+          className="mb-3 w-full textarea textarea-bordered focus:outline-none"
         />
 
         <input
@@ -55,17 +69,17 @@ const AddProduct = () => {
           placeholder="Image URL"
           required
           type="url"
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
         />
         <input
           type="number"
           name="price"
           placeholder="Price"
           required
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
         />
-        <FormSubmitButton className="btn-block">
-            Add Product
+        <FormSubmitButton className="btn-block bg-amber-500 transition-colors hover:bg-amber-600">
+          Add Product
         </FormSubmitButton>
       </form>
     </div>

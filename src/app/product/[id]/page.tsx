@@ -54,9 +54,9 @@ export const generateMetadata = async ({params}: {params: Promise<{id: string}>}
 
 
 export default async function SingleProduct(
-  params: ProductPageProps,
+  {params}: ProductPageProps,
 ){
-  const {id} = params.params;
+  const {id} = params;
 
   const product = await getProduct(id);
 

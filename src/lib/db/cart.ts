@@ -1,6 +1,9 @@
 import prisma from "@/lib/db/prisma";
 import { cookies } from "next/headers";
 import { Prisma } from "@/generated/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { Cart, CartItem } from "@/generated/prisma";
 
 export type CartWithProducts = Prisma.CartGetPayload<{
   include: {
@@ -12,17 +15,34 @@ export type CartWithProducts = Prisma.CartGetPayload<{
   };
 }>;
 
+export type CartItemWithProduct = Prisma.CartItemGetPayload<{
+  include: {
+    product: true;
+  };
+}>;
+
 export type ShoppingCart = CartWithProducts & {
   size: number;
   subtotal: number;
 };
 
 export const createCart = async (): Promise<ShoppingCart> => {
-  const newCart = await prisma.cart.create({
-    data: {},
-  });
+  const session = await getServerSession(authOptions);
+  let newCart: Cart;
 
-  (await cookies()).set("cartId", newCart.id);
+  if (session) {
+    newCart = await prisma.cart.create({
+      data: {
+        userId: session.user.id,
+      },
+    });
+  } else {
+    newCart = await prisma.cart.create({
+      data: {},
+    });
+
+    (await cookies()).set("cartId", newCart.id);
+  }
 
   return {
     ...newCart,
@@ -33,17 +53,31 @@ export const createCart = async (): Promise<ShoppingCart> => {
 };
 
 export const getCart = async (): Promise<ShoppingCart | null> => {
-  const localCartId = (await cookies()).get("cartId")?.value;
+  const session = await getServerSession(authOptions);
 
-  const cart = localCartId
-    ? await prisma.cart.findUnique({
-        where: {
-          id: localCartId,
-        },
-        // includes the cart items, and also includes the product
-        include: { item: { include: { product: true } } },
-      })
-    : null;
+  let cart: CartWithProducts | null = null;
+
+  if (session) {
+    cart = await prisma.cart.findFirst({
+      where: {
+        userId: session.user.id,
+      },
+      // includes the cart items, and also includes the product
+      include: { item: { include: { product: true } } },
+    });
+  } else {
+    const localCartId = (await cookies()).get("cartId")?.value;
+
+    cart = localCartId
+      ? await prisma.cart.findUnique({
+          where: {
+            id: localCartId,
+          },
+          // includes the cart items, and also includes the product
+          include: { item: { include: { product: true } } },
+        })
+      : null;
+  }
 
   if (!cart) {
     return null;
@@ -58,3 +92,91 @@ export const getCart = async (): Promise<ShoppingCart | null> => {
     ),
   };
 };
+
+export async function mergeAnonymousCartIntoUserCart(userId: string) {
+  const localCartId = (await cookies()).get("cartId")?.value;
+
+  const localCart = localCartId
+    ? await prisma.cart.findUnique({
+        where: {
+          id: localCartId,
+        },
+        // includes the cart items, and also includes the product
+        include: { item: true },
+      })
+    : null;
+
+  if (!localCart) {
+    return;
+  }
+
+  const userCart = await prisma.cart.findFirst({
+    where: { userId },
+    include: { item: true },
+  });
+
+  await prisma.$transaction(async (tx) => {
+    if (userCart) {
+      const mergedCartItems = mergeCartItems(localCart.item, userCart.item);
+
+      await tx.cartItem.deleteMany({
+        where: { cartId: userCart.id },
+      });
+
+      await tx.cart.update({
+        where: { id: userCart.id },
+        data: {
+          item: {
+            createMany: {
+              data: mergedCartItems.map((item) => {
+                return {
+                  productId: item.productId,
+                  quantity: item.quantity,
+                };
+              }),
+            },
+          },
+        },
+      });
+    } else {
+      await tx.cart.create({
+        data: {
+          userId,
+          item: {
+            createMany: {
+              data: localCart.item.map((item) => {
+                return {
+                  productId: item.productId,
+                  quantity: item.quantity,
+                };
+              }),
+            },
+          },
+        },
+      });
+    }
+
+    await tx.cart.deleteMany({
+      where: { id: localCart.id },
+    });
+
+const cookieStore = await cookies();
+cookieStore.set("cartId", "", { maxAge: 0, path: "/" });
+  });
+}
+{
+}
+
+function mergeCartItems(...cartItems: CartItem[][]) {
+  return cartItems.reduce((acc, items) => {
+    items.forEach((item) => {
+      const exisitingItem = acc.find((i) => i.productId === item.productId);
+      if (exisitingItem) {
+        exisitingItem.quantity += item.quantity;
+      } else {
+        acc.push(item);
+      }
+    });
+    return acc;
+  }, [] as CartItem[]);
+}

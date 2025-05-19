@@ -11,8 +11,10 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
     "@prisma/client": "^6.7.0",
+    "bcryptjs": "^3.0.2",
     "daisyui": "^5.0.35",
     "eslint-config-prettier": "^10.1.5",
+    "framer-motion": "^12.12.1",
     "next": "15.3.2",
     "next-auth": "^4.24.11",
     "prettier-plugin-tailwindcss": "^0.6.11",
