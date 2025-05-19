@@ -17,7 +17,7 @@ const FormSubmitButton = ({
   return (
     <button
       {...props}
-      className={`btn ${className}`}
+ className={`btn ${className || ''}`}
       type="submit"
       disabled={pending}
     >

@@ -160,8 +160,8 @@ export async function mergeAnonymousCartIntoUserCart(userId: string) {
       where: { id: localCart.id },
     });
 
-    const cookieStore = await cookies();
-    cookieStore.set("localCartId", "");
+const cookieStore = await cookies();
+cookieStore.set("cartId", "", { maxAge: 0, path: "/" });
   });
 }
 {
