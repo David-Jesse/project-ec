@@ -53,7 +53,7 @@ const AddProduct = async () => {
         <input
           type="text"
           placeholder="Product Name"
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
           name="name"
           required
         />
@@ -61,7 +61,7 @@ const AddProduct = async () => {
           name="description"
           required
           placeholder="Description"
-          className="mb-3 w-full textarea textarea-bordered"
+          className="mb-3 w-full textarea textarea-bordered focus:outline-none"
         />
 
         <input
@@ -69,14 +69,14 @@ const AddProduct = async () => {
           placeholder="Image URL"
           required
           type="url"
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
         />
         <input
           type="number"
           name="price"
           placeholder="Price"
           required
-          className="mb-3 w-full input input-bordered"
+          className="mb-3 w-full input input-bordered focus:outline-none"
         />
         <FormSubmitButton className="btn-block bg-amber-500 transition-colors hover:bg-amber-600">
           Add Product

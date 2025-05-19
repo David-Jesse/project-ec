@@ -10,22 +10,33 @@ export const incrementProductQuantity = async (productId: string) => {
   const articleInCart = cart.item.find((item) => item.productId === productId);
 
   if (articleInCart) {
-    await prisma.cartItem.update({
-      where: { id: articleInCart.id },
+    await prisma.cart.update({
+      where: { id: cart.id },
       data: {
-        quantity: {
-          increment: 1,
+        item: {
+          update: {
+            where: { id: articleInCart.id },
+            data: {
+              quantity: {
+                increment: 1,
+              },
+            },
+          },
         },
       },
     });
   } else {
-    await prisma.cartItem.create({
-        data: {
-            cartId: cart.id,
+    await prisma.cart.update({
+      where: { id: cart.id },
+      data: {
+        item: {
+          create: {
             productId,
-            quantity: 1
-        }
-    })
+            quantity: 1,
+          },
+        },
+      },
+    });
   }
 
   revalidatePath("/product/[id]");

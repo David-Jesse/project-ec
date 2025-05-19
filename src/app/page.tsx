@@ -29,7 +29,7 @@ export default async function Home({
     take: pageSize + (currentPage === 1 ? heroItemCount : 0),
   });
   return (
-    <div className="flex flex-col justify-center items-center gap-2">
+    <div className="flex flex-col justify-center items-center gap-2 pt-10">
       {currentPage === 1 && (
         <div className="hero rounded-xl bg-base-300">
           <div className="hero-content flex-col lg:flex-row">

@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ cart}) => {
   const isAuthPage = pathname === "/login" || pathname === "/register";
 
   return (
-    <div className="bg-base-100">
+    <div className="bg-base-100 flex items-center justify-center">
       <div
         className={`navbar w-[85%] mx-auto flex flex-col sm:flex-row gap-4 ${isAuthPage ? "justify-center" : ""}`}
       >

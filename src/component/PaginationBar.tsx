@@ -1,56 +1,68 @@
 import Link from "next/link";
-import { JSX } from "react";
 
 interface PaginationBarProps {
   currentPage: number;
   totalPages: number;
+  searchParams?: Record<string, string>
+
 }
 
-const PaginationBar = ({ currentPage, totalPages }: PaginationBarProps) => {
-  const maxPage = Math.min(totalPages, Math.max(currentPage + 4, 6));
-  const minPage = Math.max(1, Math.min(currentPage - 5, maxPage - 9));
+export default function PaginationBar({
+  currentPage,
+  totalPages,
+  searchParams = {},
+}: PaginationBarProps) {
+  const renderPageLink = (pageNumber: number, label?: string) => {
+    const newParams = {...searchParams, page: pageNumber.toString()};
+    
 
-  const numberedPageItems: JSX.Element[] = [];
+    const queryString = Object.entries(newParams).map(([key, value]) => `${key}=${encodeURIComponent(String(value))}`).join('&');
 
-  for (let page = minPage; page <= maxPage; page++) {
-    numberedPageItems.push(
+    const isCurrentPage = pageNumber === currentPage;
+
+    return (
       <Link
-        href={`?page=${page}`}
-        key={page}
-        className={`join-item btn ${currentPage === page ? "btn-active pointer-events-none" : ""}`}
+        href={`?${queryString}`}
+        className={`join-item btn ${
+          isCurrentPage ? "btn-active pointer-events-none" : ""
+        }`}
       >
-        {page}
+        {label || pageNumber}
       </Link>
-    );
+    )
   }
-  return (
-    <>
-      <div className="join hidden sm:block">{numberedPageItems}</div>
-      <div className="join block sm:hidden">
-        {currentPage > 1 && (
-          <Link
-            href={`?page=${currentPage - 1}`}
-            className="btn join-item"
-            aria-label="Previous page"
-          >
-            <span aria-hidden="true">{"<"}</span>
-          </Link>
-        )}
-        <button className="btn join-item pointer-events-none">
-          page {currentPage}
-        </button>
-        {currentPage < totalPages && (
-          <Link
-            href={`?page=${currentPage + 1}`}
-            className="btn join-item"
-            aria-label="Next page"
-          >
-            <span aria-hidden="true">{">"}</span>
-          </Link>
-        )}
-      </div>
-    </>
-  );
-};
 
-export default PaginationBar;
+  return (
+    <div className="join">
+      {currentPage > 1 && renderPageLink(1, "«")}
+      {currentPage > 1 && renderPageLink(currentPage - 1, "‹")}
+
+      {/* Shows the current page and neigbors */}
+
+      {Array.from({length: Math.min(5, totalPages)}, (_, i) => {
+        let pageNumber;
+        
+        if (totalPages <= 5) {
+          pageNumber = 1 + i;
+        } else if (currentPage >= totalPages - 2) {
+          pageNumber = totalPages - 4 + i;
+        } else {
+          pageNumber = currentPage - 2 + i;
+        }
+
+        if (pageNumber > 0 && pageNumber <= totalPages) {
+          return (
+            <div key={pageNumber}>
+              {renderPageLink(pageNumber)}
+            </div>
+          )
+          
+        }
+        return null;
+      })}
+
+      {currentPage < totalPages && renderPageLink(currentPage + 1, "›")}
+      {currentPage < totalPages && renderPageLink(totalPages, "»")}
+    </div>
+  )
+}
