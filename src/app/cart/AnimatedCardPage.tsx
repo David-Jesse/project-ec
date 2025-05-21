@@ -6,6 +6,7 @@ import { cartContainerVariants, cartItemVariants, checkoutButtonVariants } from 
 import { formatPrice } from '@/lib/format';
 import CartEntry from './CartEntry';
 import { ShoppingCart } from '@/lib/db/cart';
+import CheckoutButton from '@/component/CheckoutButton';
 
 interface AnimatedCartPageProps {
     cart: ShoppingCart | null;
@@ -82,15 +83,23 @@ const AnimatedCartPage = ({cart, setProductQuantity}: AnimatedCartPageProps) => 
                     Total: {formatPrice(cart?.subtotal || 0)}
                 </motion.p>
 
-                <motion.button
-                    className="btn bg-amber-500 transition-colors hover:bg-amber-600 sn:w-[200px]"
-                    variants={checkoutButtonVariants}
-                    initial='initial'
-                    whileHover="hover"
-                    whileTap="tap"
-                >
-                    Checkout
-                </motion.button>
+                {cart?.id && cart.item && cart.item.length > 0 ? (
+                    <CheckoutButton  
+                        type="button" 
+                        disabled={!cart.item.length}
+                        cartId={cart.id}
+                    >
+                        Checkout
+                    </CheckoutButton>
+                ) : (
+                    <motion.button
+                        className="btn bg-amber-500 transition-colors hover:bg-amber-600 sm:w-[200px] opacity-50 cursor-not-allowed"
+                        variants={checkoutButtonVariants}
+                        initial='initial'
+                    >
+                        Checkout
+                    </motion.button>
+                )}
             </motion.div>
         </motion.div>
     )
