@@ -18,7 +18,7 @@ interface OrderData {
   total?: number;
 }
 
-const OrderSummary = ({ orderData }: { orderData: OrderData }) => {
+const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
   const [promoCode, setPromoCode] = useState("");
   const [promoError, setPromoError] = useState("");
   const [promoSuccess, setPromoSuccess] = useState("");
@@ -127,28 +127,31 @@ const OrderSummary = ({ orderData }: { orderData: OrderData }) => {
         )}
       </div>
 
-      <form onSubmit={handlePromoSubmit} className='mb-6'>
-        <div className="flex space-x-2">
-            <input 
-                type="text"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-                placeholder="Promo Code"
-                className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadpw-sm focus:outline-none focus-ring-1 focus:ring-amber-500 focus:border-amber-500 text-sm"
-            />
-            <button
-                type="submit"
-                disabled={applyingPromo}
-                className={`px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium ${
-                    applyingPromo ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-700'
-                }`}
-            >   
-                {applyingPromo ? 'Applying...' : 'Apply'}
-            </button>
-        </div>
-        {promoError && <p className="mt-1 text-sm text-red-600">{promoError}</p>}
-        {promoSuccess && <p className="mt-1 text-sm text-green-600">{promoSuccess}</p>}
-      </form>
+<form onSubmit={handlePromoSubmit} className="mb-6">
+ <label htmlFor="promo-code" className="sr-only">Promo Code</label>
+  <div className="flex space-x-2">
+    <input 
+     id="promo-code"
+      type="text"
+      value={promoCode}
+      onChange={(e) => setPromoCode(e.target.value)}
+      placeholder="Promo Code"
+     className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 text-sm"
+     aria-describedby={promoError ? "promo-error" : promoSuccess ? "promo-success" : undefined}
+    />
+    <button
+      type="submit"
+      disabled={applyingPromo}
+      className={`px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium ${
+        applyingPromo ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-700'
+      }`}
+    >   
+      {applyingPromo ? 'Applying...' : 'Apply'}
+    </button>
+  </div>
+ {promoError && <p id="promo-error" className="mt-1 text-sm text-red-600" role="alert">{promoError}</p>}
+ {promoSuccess && <p id="promo-success" className="mt-1 text-sm text-green-600" role="status">{promoSuccess}</p>}
+</form>
 
       {/* Price breakdown */}
       <div className="space-y-2 text-sm">

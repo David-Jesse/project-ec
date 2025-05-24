@@ -68,7 +68,7 @@ async function createOrderFromCart(
     throw new Error("Cart not found or is empty");
   }
 
-  const total = cart.item.reduce((acc, item) => acc + item.product.price, 0);
+  const total = cart.item.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
 
   await prisma.$transaction(async (tx) => {
     const order = await tx.order.create({

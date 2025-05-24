@@ -11,7 +11,7 @@ const CheckoutStepper = ({ steps, currentStep }: CheckoutStepperProps) => {
                     <div className='flex items-center' key={index}>
                         <div
                             className={`flex items-center justify-center h-10 w-10 rounded-full border-2 text-sm font-medium ${index < currentStep
-                                ? "bg-blue-600 text-whote border-blue-600" // Completed
+                                ? "bg-blue-600 text-white border-blue-600" // Completed
                                 : index === currentStep
                                     ? "border-blue-600 text-blue-600" // Current
                                     : "border-gray-300 text-gray-400" // Upcoming
@@ -33,7 +33,7 @@ const CheckoutStepper = ({ steps, currentStep }: CheckoutStepperProps) => {
                             </p>
                         </div>
 
-                        {index < step.length - 1 && (
+                        {index < steps.length - 1 && (
                             <div
                                 className={`flex-1 h-0.5 w-16 ${index < currentStep ? "bg-blue-600" : "bg-gray-300"
                                     }`}

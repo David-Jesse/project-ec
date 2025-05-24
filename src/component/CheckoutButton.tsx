@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-type PaymentButtonProps = {
+type CheckoutButtonProps = {
   type: "button" | "submit" | "reset";
   disabled: boolean;
   children: ReactNode;
@@ -15,7 +15,7 @@ export default function CheckoutButton({
   disabled = false,
   children,
   cartId,
-}: PaymentButtonProps) {
+}: CheckoutButtonProps) {
   const router = useRouter();
 
   const handleCheckout = () => {

@@ -34,7 +34,7 @@ export async function handleCheckout(cartId: string) {
     const { url } = await createCheckoutSession(
       cartId,
       items,
-      cart.user?.id || "guest"
+      cart.user?.id || "",
     );
 
     if (!url) {

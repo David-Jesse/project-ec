@@ -51,9 +51,9 @@ interface Order {
 }
 
 const statusColors = {
-  PENDING: "bg-yellow-100 text-yello-800",
+  PENDING: "bg-yellow-100 text-yellow-800",
   PAID: "bg-green-100 text-green-800",
-  PROCCESSING: "bg-blue-100 text-blue-800",
+  PROCESSING: "bg-blue-100 text-blue-800",
   SHIPPED: "bg-purple-100 text-purple-800",
   DELIVERED: "bg-green-100 text-green-800",
   CANCELLED: "bg-red-100 text-red-800",
@@ -173,7 +173,7 @@ export default function OrderPage() {
           <p className="text-gray-600 mb-4">{error}</p>
           <button
             onClick={fetchOrders}
-            className="bg-amber-400 hover:bg-amber-700 px-4 py-2 rounded-lg transiton-colors"
+            className="bg-amber-400 hover:bg-amber-700 px-4 py-2 rounded-lg transition-colors"
           >
             Try Again
           </button>
@@ -194,7 +194,7 @@ export default function OrderPage() {
         {/* Order list */}
         {orders.length === 0 ? (
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
-            <Package className="h-16 s-16 text-gray-300 mx-auto mb-4" />
+            <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               No Orders Yet
             </h3>
@@ -305,8 +305,8 @@ export default function OrderPage() {
                                   src={item.product.imageUrl}
                                   alt={item.product.name}
                                   className="h-12 w-12 object-cover rounded-lg"
-                                  width={24}
-                                  height={24}
+                                  width={48}
+                                  height={48}
                                 />
                               )}
                               <div>

@@ -3,8 +3,8 @@
 import { ReactNode } from "react"
 
 type PaymentButtonProps =  {
-    type: "button" | "submit" | "reset"
-    disabled: boolean
+   type?: "button" | "submit" | "reset"
+   disabled?: boolean
     children: ReactNode
 }
 

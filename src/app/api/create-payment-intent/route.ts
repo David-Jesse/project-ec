@@ -5,7 +5,18 @@ import prisma from "@/lib/db/prisma";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { cartId } = await req.json();
+  // Add authentication check
+  // const session = await getServerSession();
+  // if (!session?.user) {
+  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // }
+
+   const { cartId } = await req.json();
+  
+  // Add input validation
+  if (!cartId || typeof cartId !== 'string') {
+    return NextResponse.json({ error: "Valid cart ID is required" }, { status: 400 });
+  }
 
   const cart = await prisma.cart.findUnique({
     where: { id: cartId },

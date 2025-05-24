@@ -17,7 +17,8 @@ import CheckoutStepper from "@/component/CheckoutStepper";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
-console.log("Stripe key:", process.env.STRIPE_PUBLISHABLE_KEY);
+// Remove this line or use correct env var for debugging
+// console.log("Stripe key:", process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 const cardElementOptions = {
   style: {
@@ -233,7 +234,7 @@ const CheckoutForm = () => {
                 Payment Information
               </h2>
               <p className="text-gray-600">
-                All transactions are secure and encryted
+                All transactions are secure and encrypted
               </p>
 
               <form onSubmit={handlePaymentSubmit} className="space-y-6">
@@ -244,7 +245,7 @@ const CheckoutForm = () => {
                   >
                     Card Information
                   </label>
-                  <div className="border border-gray-300 p-4 rounded-md shadpw-sm bg-white focus-within:ring-2 focus-within:ring-amber-400">
+                  <div className="border border-gray-300 p-4 rounded-md shadow-sm bg-white focus-within:ring-2 focus-within:ring-amber-400">
                     <CardElement options={cardElementOptions} />
                   </div>
                 </div>
@@ -269,7 +270,7 @@ const CheckoutForm = () => {
                     className={`px-6 py-3 rounded-md shadow-sm text-sm font-medium text-white bg-amber-600 ${
                       loading || !stripe
                         ? "opacity-70 cursor-not-allowed"
-                        : "bg:hover-amber-800 focus:outline-none focus:ring-2 focus:ring-offest-2 focus:ring-amber-500"
+                        : "hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                     }`}
                   >
                     {loading ? (

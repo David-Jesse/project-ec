@@ -24,11 +24,7 @@ export default function CheckoutForm() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            amount: 1000, // Shows the amount in cents
-            currency: "usd",
-            payment_method_types: ["card", "affirm"],
-          }),
+
         });
 
         const data = await response.json();

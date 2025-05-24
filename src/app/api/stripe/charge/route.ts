@@ -121,7 +121,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             error:
-              "Paymenet succeeded but order creation failed. Please contact support.",
+              "Payment succeeded but order creation failed. Please contact support.",
           },
           { status: 500 }
         );

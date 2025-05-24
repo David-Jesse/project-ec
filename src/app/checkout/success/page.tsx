@@ -51,7 +51,7 @@ export default function CheckoutSuccess() {
         {orderDetails.orderId && (
           <div className="bg-gray-50 rounded-lg p-4 mb-6">
             <p className="text-sm text-gray-600">Order ID</p>
-            <p className="font-mono text-sm text-gray-900 break all">
+            <p className="font-mono text-sm text-gray-900 break-all">
               {orderDetails.orderId}
             </p>
           </div>
@@ -79,7 +79,7 @@ export default function CheckoutSuccess() {
           <p className="text-xs text-gray-500">
             Need help? Contact our support team at {""}
             <a
-              href="mailto:djesse351@gmail.com"
+              href="mailto:support@yourstore.com"
               className="text-amber-600 hover:underline"
             >
               support@yourstore.com
