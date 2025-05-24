@@ -4,17 +4,34 @@ import Image from "next/image";
 import profilePicPlaceholder from "../assets/profilePicPlaceholder.png";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useRef } from "react";
 
 const UserMenuButton = () => {
   const { data: session, status } = useSession();
   const user = session?.user;
   const router = useRouter();
+  const dropdownRef = useRef<HTMLLabelElement>(null);
+
+  const closeDropdown = () => {
+    const activeElement = document.activeElement;
+    if (activeElement instanceof HTMLElement && dropdownRef.current) {
+      activeElement.blur();
+      dropdownRef.current.click();
+    }
+  };
+
+  const handleOrders = () => {
+    closeDropdown();
+    router.push("/orders");
+  };
 
   const handleAddProduct = () => {
+    closeDropdown();
     router.push("/add-product");
   };
 
   const handleSignIn = () => {
+    closeDropdown();
     router.push("/login");
   };
 
@@ -34,7 +51,11 @@ const UserMenuButton = () => {
   return (
     <div className="flex justify-center gap-4 items-center">
       <div className="dropdown dropdown-end mt-2">
-        <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+        <label
+          tabIndex={0}
+          className="btn btn-ghost btn-circle avatar"
+          ref={dropdownRef}
+        >
           {user ? (
             <Image
               src={user?.image || profilePicPlaceholder}
@@ -66,6 +87,11 @@ const UserMenuButton = () => {
           {user && (
             <li>
               <button onClick={handleAddProduct}>Add Product</button>
+            </li>
+          )}
+          {user && (
+            <li>
+              <button onClick={handleOrders}>My Orders</button>
             </li>
           )}
           <li>

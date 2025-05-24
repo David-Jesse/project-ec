@@ -9,14 +9,15 @@ datasource db {
 }
 
 model Product {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   description String
   imageUrl    String
   name        String
-  price       Int
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  price       Float
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
   CartItem    CartItem[]
+  OrderItem   OrderItem[]
 
   @@map("products")
 }
@@ -83,6 +84,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   Cart          Cart[]
+  Order         Order[]
 
   @@map("users")
 }
@@ -95,4 +97,33 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Order {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String      @db.ObjectId
+  paymentId      String?
+  total          Float
+  status         String // "PENDING", "PAID", "SHIPPED", etc.
+  items          OrderItem[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  billing        Json?
+  shipping       Json?
+  trackingNumber String?
+  User           User        @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model OrderItem {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String  @db.ObjectId
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int
+  price     Float
+
+  @@map("order_items")
 }
