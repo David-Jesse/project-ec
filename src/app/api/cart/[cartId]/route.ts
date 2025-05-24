@@ -37,34 +37,33 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ clientSecret: paymentIntent.client_secret });
 }
 
-
 export async function GET(
-    req: NextRequest,
-    {params}: {params: {cartId: string}}
+  req: NextRequest,
+  { params }: { params: Promise<{ cartId: string }> }
 ) {
-    try {
-        const {cartId} = params;
+  try {
+    const { cartId } = await params;
 
-        const cart = await prisma.cart.findUnique({
-            where: {id: cartId},
-            include: {
-                item: {
-                    include: {
-                        product: true
-                    }
-                }
-            }
-        }) 
-        
-        if(!cart) {
-            return NextResponse.json({error: "Cart not found"}, {status: 404});
-        }
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        item: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
 
-        return NextResponse.json(cart);
-    } catch (error) {
-        return NextResponse.json(
-            { error: "Failed to fetch cart data", details: error },
-            { status: 500 }
-        )
+    if (!cart) {
+      return NextResponse.json({ error: "Cart not found" }, { status: 404 });
     }
+
+    return NextResponse.json(cart);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to fetch cart data", details: error },
+      { status: 500 }
+    );
+  }
 }

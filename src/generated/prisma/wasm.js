@@ -182,7 +182,10 @@ exports.Prisma.OrderScalarFieldEnum = {
   total: 'total',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  billing: 'billing',
+  shipping: 'shipping',
+  trackingNumber: 'trackingNumber'
 };
 
 exports.Prisma.OrderItemScalarFieldEnum = {

@@ -27,12 +27,27 @@ export async function POST(req: NextRequest) {
     0
   );
 
+  // Validated amount
+  const amountInCents = Math.round(amount * 100);
+  if (amountInCents < 50) {
+    return NextResponse.json(
+      { error: "Minimum payment is $0.50" },
+      { status: 400 }
+    );
+  }
+
+  // Create Payment intent
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: Math.round(amount * 100),
+    amount: amountInCents,
     currency: "usd",
-    metadata: { cartId },
+    metadata: { cartId, userId: cart.userId },
     automatic_payment_methods: { enabled: true },
+    description: `Purchase from Cart ${cartId}`,
   });
 
-  return NextResponse.json({ clientSecret: paymentIntent.client_secret });
+  return NextResponse.json({
+    clientSecret: paymentIntent.client_secret,
+    amount: amountInCents,
+    currency: "usd",
+  });
 }
