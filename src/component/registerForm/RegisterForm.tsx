@@ -70,7 +70,7 @@ const RegisterForm = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <div className="px-4 lg:px-0">
           <label
             htmlFor="email"
             className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2"
@@ -88,7 +88,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        <div>
+        <div className='px-4 lg:px-0'>
           <label
             htmlFor="password"
             className="block text-gray-700 text-sm font-medium mb-1 sm:mb-2"
@@ -107,7 +107,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        <div className="flex items-center mt-2">
+        <div className="flex items-center mt-2 px-4 lg:px-0">
           <input
             type="checkbox"
             id="isVendor"
@@ -125,13 +125,16 @@ const RegisterForm = () => {
           </label>
         </div>
 
-        <button
+        <div className='flex items-center justify-center'>
+           <button
           type="submit"
-          className="w-full bg-amber-400 py-2 px-4 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-50 focus:ring-offset-2 transition-colors disabled:opacity-70 text-sm sm:text-base font-medium mt-2 "
+          className="lg:w-full sm:w-[70%] flex items-center justify-center  bg-amber-400 py-2 px-4 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-50 focus:ring-offset-2 transition-colors disabled:opacity-70 text-sm sm:text-base font-medium mt-2 "
           disabled={isLoading}
         >
           {isLoading ? "Creating Account..." : "Sign Up"}
         </button>
+        </div>
+       
       </form>
 
       <div className="mt-4 text-center">

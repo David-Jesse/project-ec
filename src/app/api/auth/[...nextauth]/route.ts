@@ -8,15 +8,37 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { mergeAnonymousCartIntoUserCart } from "@/lib/db/cart";
 
-// Extend the Session type to include 'id' on user
+// Extend the Session and User types to include 'id' and 'isVendor' on user
 declare module "next-auth" {
   interface Session {
     user: {
+      role: string;
       id: string;
       name?: string | null;
       email?: string | null;
       image?: string | null;
+      isVendor?: boolean;
     };
+  }
+  interface User {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    isVendor?: boolean;
+  }
+}
+
+declare module "@auth/core/adapters" {
+  interface AdapterUser {
+    isVendor?: boolean;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string;
+    isVendor?: boolean;
   }
 }
 
@@ -65,7 +87,13 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        return user;
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image,
+          isVendor: user.isVendor,
+        }
       },
     }),
   ],
@@ -119,6 +147,7 @@ export const authOptions: NextAuthOptions = {
 
             if (exisitingUser) {
               user.id = exisitingUser.id;
+              user.isVendor = exisitingUser.isVendor;
             }
           }
         }
@@ -132,12 +161,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.isVendor = user.isVendor;
       }
       return token;
     },
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.isVendor = token.isVendor;
       }
 
       return session;

@@ -85,6 +85,7 @@ model User {
   sessions      Session[]
   Cart          Cart[]
   Order         Order[]
+  isVendor      Boolean   @default(false)
 
   @@map("users")
 }

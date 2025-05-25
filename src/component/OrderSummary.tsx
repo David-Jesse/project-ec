@@ -87,7 +87,7 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
+    <div className="bg-white rounded-lg shadow-md lg:p-6 p-7 top-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Order Summary
       </h2>
@@ -127,7 +127,7 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
         )}
       </div>
 
-<form onSubmit={handlePromoSubmit} className="mb-6">
+<form onSubmit={handlePromoSubmit} className="mb-6 flex ">
  <label htmlFor="promo-code" className="sr-only">Promo Code</label>
   <div className="flex space-x-2">
     <input 
@@ -142,7 +142,7 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
     <button
       type="submit"
       disabled={applyingPromo}
-      className={`px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium ${
+      className={`lg:px-4 lg:py-2 px-4 py-3  bg-gray-800 text-white rounded-md text-sm font-medium ${
         applyingPromo ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-700'
       }`}
     >   

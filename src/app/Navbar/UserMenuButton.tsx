@@ -6,9 +6,22 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
 
-const UserMenuButton = () => {
+type UserWithRole = {
+  id: string;
+  name?: string | null;
+  email?: string | null;
+  image?: string | null;
+  isVendor?: boolean;
+  role?: string;
+};
+
+interface UserMenuButtonProps {
+  onItemClick?: () => void;
+}
+
+const UserMenuButton: React.FC<UserMenuButtonProps> = ({onItemClick}) => {
   const { data: session, status } = useSession();
-  const user = session?.user;
+  const user = session?.user as UserWithRole | undefined;
   const router = useRouter();
   const dropdownRef = useRef<HTMLLabelElement>(null);
 
@@ -22,6 +35,7 @@ const UserMenuButton = () => {
 
   const handleOrders = () => {
     closeDropdown();
+    onItemClick?.();
     router.push("/orders");
   };
 
@@ -47,6 +61,10 @@ const UserMenuButton = () => {
       callbackUrl: "/",
     });
   };
+
+  
+  // Check if user is a vendor
+  const isVendor = user?.isVendor || user?.role === "vendor";
 
   return (
     <div className="flex justify-center gap-4 items-center">
@@ -84,7 +102,7 @@ const UserMenuButton = () => {
           tabIndex={0}
           className="menu menu-compact dropdown-content rounded-box mt-3 w-52 bg-base-100 p-2 shadow"
         >
-          {user && (
+          {user && isVendor && (
             <li>
               <button onClick={handleAddProduct}>Add Product</button>
             </li>

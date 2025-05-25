@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password } = body;
+    const { email, password, isVendor } = body;
 
     if (!email || !password) {
       return NextResponse.json(
@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         name: email.split("@")[0],
         email,
         password: hashedPassword,
+        isVendor: isVendor || false, // Default to false if not provided
       },
     });
 
