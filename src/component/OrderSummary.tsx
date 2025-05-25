@@ -1,4 +1,4 @@
-import { Key, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 type OrderSummaryItem = {
@@ -49,7 +49,7 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
     total = 0,
   } = orderData;
 
-  const handlePromoSubmit = async (e: { preventDefault: () => void; }) => {
+  const handlePromoSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     setPromoError("");
@@ -78,7 +78,6 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
       } else {
         setPromoError(data.message || "Invalid promo code.");
       }
-  
     } catch {
       setPromoError("Could not validate promo code. Please try again");
     } finally {
@@ -87,110 +86,139 @@ const OrderSummary = ({ orderData }: { orderData?: OrderData }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 sticky top-6">
+    <div className="bg-white rounded-lg shadow-md lg:p-6 p-7 top-6">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
         Order Summary
       </h2>
 
       <div className="space-y-6 mb-6">
-        {items.map(
-          (
-            item: OrderSummaryItem,
-            index: Key | null
-          ) => (
-            <div
-              key={index}
-              className="flex justify-between items-center py-2 border-b border-gray-100"
-            >
-              <div className="flex items-center space-x-3">
-            {item.image && (
-              <div className="h-12 w-12 rounded overflow-hidden bg-gray-100 flex-shrink-0">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            )}
-            <div>
-                <p className='font-medium text-gray-800'>
-                {item.name} {item.quantity > 1 && `(${item.quantity})`}
+        {items.map((item: OrderSummaryItem, index: number) => (
+          <div
+            key={index}
+            className="flex justify-between items-center py-2 border-b border-gray-100"
+          >
+            <div className="flex items-center space-x-3">
+              {item.image && (
+                <div className="h-12 w-12 rounded overflow-hidden bg-gray-100 flex-shrink-0">
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    width={48}
+                    height={48}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              )}
+              <div>
+                <p className="font-medium text-gray-800">
+                  {item.name} {item.quantity > 1 && `(${item.quantity})`}
                 </p>
-                <p className="text-sm text-gray-500">{item.variant || ''}</p>
-            </div>
+                <p className="text-sm text-gray-500">{item.variant || ""}</p>
               </div>
-              <span className="font-medium text-gray-700">
-                ${(item.price * item.quantity).toFixed(2)}
-              </span>
             </div>
-          )
-        )}
+            <span className="font-medium text-gray-700">
+              ${(item.price * item.quantity).toFixed(2)}
+            </span>
+          </div>
+        ))}
       </div>
 
-<form onSubmit={handlePromoSubmit} className="mb-6">
- <label htmlFor="promo-code" className="sr-only">Promo Code</label>
-  <div className="flex space-x-2">
-    <input 
-     id="promo-code"
-      type="text"
-      value={promoCode}
-      onChange={(e) => setPromoCode(e.target.value)}
-      placeholder="Promo Code"
-     className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 text-sm"
-     aria-describedby={promoError ? "promo-error" : promoSuccess ? "promo-success" : undefined}
-    />
-    <button
-      type="submit"
-      disabled={applyingPromo}
-      className={`px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium ${
-        applyingPromo ? 'opacity-70 cursor-not-allowed' : 'hover:bg-gray-700'
-      }`}
-    >   
-      {applyingPromo ? 'Applying...' : 'Apply'}
-    </button>
-  </div>
- {promoError && <p id="promo-error" className="mt-1 text-sm text-red-600" role="alert">{promoError}</p>}
- {promoSuccess && <p id="promo-success" className="mt-1 text-sm text-green-600" role="status">{promoSuccess}</p>}
-</form>
+      <form onSubmit={handlePromoSubmit} className="mb-6 flex ">
+        <label htmlFor="promo-code" className="sr-only">
+          Promo Code
+        </label>
+        <div className="flex space-x-2">
+          <input
+            id="promo-code"
+            type="text"
+            value={promoCode}
+            onChange={(e) => setPromoCode(e.target.value)}
+            placeholder="Promo Code"
+            className="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-amber-500 focus:border-amber-500 text-sm"
+            aria-describedby={
+              promoError
+                ? "promo-error"
+                : promoSuccess
+                  ? "promo-success"
+                  : undefined
+            }
+          />
+          <button
+            type="submit"
+            disabled={applyingPromo}
+            className={`lg:px-4 lg:py-2 px-4 py-3  bg-gray-800 text-white rounded-md text-sm font-medium ${
+              applyingPromo
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:bg-gray-700"
+            }`}
+          >
+            {applyingPromo ? "Applying..." : "Apply"}
+          </button>
+        </div>
+        {promoError && (
+          <p
+            id="promo-error"
+            className="mt-1 text-sm text-red-600"
+            role="alert"
+          >
+            {promoError}
+          </p>
+        )}
+        {promoSuccess && (
+          <p
+            id="promo-success"
+            className="mt-1 text-sm text-green-600"
+            role="status"
+          >
+            {promoSuccess}
+          </p>
+        )}
+      </form>
 
       {/* Price breakdown */}
       <div className="space-y-2 text-sm">
-        <div className='flex justify-between'>
-            <span className="text-gray-600">Subtotal</span>
-            <span className="font-medium text-gray-800">${subtotal.toFixed(2)}</span>
-        </div>
-
-        <div className='flex justify-between'>
-            <span className='text-gray-600'>Shipping</span>
-            <span className="font-medium text-gray-800">
-                {shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`}
-            </span>
+        <div className="flex justify-between">
+          <span className="text-gray-600">Subtotal</span>
+          <span className="font-medium text-gray-800">
+            ${subtotal.toFixed(2)}
+          </span>
         </div>
 
         <div className="flex justify-between">
-            <span className="text-gray-600">Tax</span>
-            <span className="font-medium text-gray-800">${tax.toFixed(2)}</span>
+          <span className="text-gray-600">Shipping</span>
+          <span className="font-medium text-gray-800">
+            {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+          </span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="text-gray-600">Tax</span>
+          <span className="font-medium text-gray-800">${tax.toFixed(2)}</span>
         </div>
 
         {discount > 0 && (
-            <div className="flex justify-between text-green-600">
-                <span>Discount</span>
-                <span>-${discount.toFixed(2)}</span>
-            </div>
+          <div className="flex justify-between text-green-600">
+            <span>Discount</span>
+            <span>-${discount.toFixed(2)}</span>
+          </div>
         )}
 
         <div className="border-t border-gray-200 pt-2 mt-2">
-            <div className="flex justify-between font-semibold">
-                <span className="text-lg">Total</span>
-                <span className="text-lg">${total.toFixed(2)}</span>
-            </div>
+          <div className="flex justify-between font-semibold">
+            <span className="text-lg">Total</span>
+            <span className="text-lg">${total.toFixed(2)}</span>
+          </div>
         </div>
 
-        <div className='mt-6 flex items-center justify-center text-gray-500 text-sm'>
-              <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-        </svg>
-            Secure Checkout 
+        <div className="mt-6 flex items-center justify-center text-gray-500 text-sm">
+          <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          Secure Checkout
         </div>
       </div>
     </div>

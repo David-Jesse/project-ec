@@ -10,13 +10,19 @@ const RegisterForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    isVendor: false,
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: {
+    target: { name: string; value: string; type: string; checked?: boolean };
+  }) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -64,7 +70,7 @@ const RegisterForm = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <div className="px-4 lg:px-0">
           <label
             htmlFor="email"
             className="block text-sm font-medium text-gray-700 mb-1 sm:mb-2"
@@ -82,7 +88,7 @@ const RegisterForm = () => {
           />
         </div>
 
-        <div>
+        <div className='px-4 lg:px-0'>
           <label
             htmlFor="password"
             className="block text-gray-700 text-sm font-medium mb-1 sm:mb-2"
@@ -101,13 +107,34 @@ const RegisterForm = () => {
           />
         </div>
 
-        <button
+        <div className="flex items-center mt-2 px-4 lg:px-0">
+          <input
+            type="checkbox"
+            id="isVendor"
+            name="isVendor"
+            checked={formData.isVendor}
+            onChange={handleChange}
+            className="h-4 w-4 text-amber-500 focus:ring-amber-500 border-gray-300 rounded"
+          />
+
+          <label
+            htmlFor="isVendor"
+            className="ml-2 block text-sm text-gray-700"
+          >
+            Sign up as a vendor
+          </label>
+        </div>
+
+        <div className='flex items-center justify-center'>
+           <button
           type="submit"
-          className="w-full bg-amber-400 py-2 px-4 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-50 focus:ring-offset-2 transition-colors disabled:opacity-70 text-sm sm:text-base font-medium mt-2 "
+          className="lg:w-full sm:w-[70%] flex items-center justify-center  bg-amber-400 py-2 px-4 rounded-lg hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-50 focus:ring-offset-2 transition-colors disabled:opacity-70 text-sm sm:text-base font-medium mt-2 "
           disabled={isLoading}
         >
           {isLoading ? "Creating Account..." : "Sign Up"}
         </button>
+        </div>
+       
       </form>
 
       <div className="mt-4 text-center">

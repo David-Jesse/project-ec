@@ -229,7 +229,7 @@ export default function OrderPage() {
                         </span>
                       </div>
                       {order.paymentId && (
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className=" sm:text-center sm:px-2 sm:py-1 lg:px-3 lg:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                           Payment ID: {order.paymentId.slice(-8)}
                         </span>
                       )}
@@ -339,7 +339,6 @@ export default function OrderPage() {
                             </p>
                             <p className="text-gray-900">
                               {order.shipping.city}, {order.shipping.postalCode}
-                              , {order.shipping.country}
                             </p>
                             <p className="text-gray-900">
                               {order.shipping.country}

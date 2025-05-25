@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState} from "react";
 import { motion } from "framer-motion";
 
 // Move InputField outside the main component
@@ -241,7 +241,7 @@ const BillingDetailsForm = ({ billingDetails, onSubmit }) => {
                 <div className="flex justify-end pt-4">
                     <button
                         type="submit"
-                        className="px-6 py-3 rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        className="px-6 py-3 rounded-md shadow-sm text-sm font-semibold bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                         Continue to Payment
                     </button>

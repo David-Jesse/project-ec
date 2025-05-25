@@ -89,7 +89,6 @@ export async function POST(request: Request) {
       try {
         const order = await createOrder({
           userId: cart.userId,
-          user: cart.user ? cart.user.id : cart.userId || "",
           items: orderItems,
           total: amount,
           paymentId: paymentIntent.id,
