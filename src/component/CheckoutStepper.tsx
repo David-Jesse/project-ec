@@ -8,7 +8,7 @@ const CheckoutStepper = ({
       <div className="block sm:hidden">
         <div className="space-y-4">
           {steps.map((step, index) => (
-            <div className="flex items-center" key={index}>
+            <div className="flex items-center relative" key={index}>
               <div
                 className={`flex items-center justify-center h-8 w-8 rounded-full border-2 text-xs font-medium flex-shrink-0 ${
                   index < currentStep

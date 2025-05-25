@@ -114,7 +114,7 @@ const RegisterForm = () => {
             name="isVendor"
             checked={formData.isVendor}
             onChange={handleChange}
-            className="h-4 w-4 text-amber-500 focus:ring-amber-500 broder-gray-300 rounded"
+            className="h-4 w-4 text-amber-500 focus:ring-amber-500 border-gray-300 rounded"
           />
 
           <label

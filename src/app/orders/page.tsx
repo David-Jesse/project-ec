@@ -339,7 +339,6 @@ export default function OrderPage() {
                             </p>
                             <p className="text-gray-900">
                               {order.shipping.city}, {order.shipping.postalCode}
-                              , {order.shipping.country}
                             </p>
                             <p className="text-gray-900">
                               {order.shipping.country}

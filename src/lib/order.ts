@@ -7,24 +7,23 @@ interface OrderItemInput {
 }
 
 interface CreateOrderParams {
-  userId?: string | null;
-  items: OrderItemInput[];
-  total: number;
-  paymentId?: string;
-  shipping?: {
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-  };
-  billing?: {
-    address: string;
-    city: string;
-    postalCode: string;
-    country: string;
-  };
-  user: string;
-}
+   userId?: string | null;
+   items: OrderItemInput[];
+   total: number;
+   paymentId?: string;
+   shipping?: {
+     address: string;
+     city: string;
+     postalCode: string;
+     country: string;
+   };
+   billing?: {
+     address: string;
+     city: string;
+     postalCode: string;
+     country: string;
+   };
+ }
 
 export async function createOrder({
   userId,
