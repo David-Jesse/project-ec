@@ -13,6 +13,8 @@ import { motion } from "framer-motion";
 import OrderSummary from "@/component/OrderSummary";
 import BillingDetailsForm from "@/component/BillingDetailsForm";
 import CheckoutStepper from "@/component/CheckoutStepper";
+import { useSession } from "next-auth/react";
+//import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
@@ -46,12 +48,14 @@ const CheckoutForm = () => {
   const params = useParams();
   const router = useRouter();
   const cartId = params.cartId;
+  const { data: session, status } = useSession();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [orderData, setOrderData] = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const [billingDetails, setBillingDetails] = useState({
     name: "",
@@ -68,22 +72,45 @@ const CheckoutForm = () => {
   });
 
   useEffect(() => {
+
+    if (status === "unauthenticated") {
+      const currentUrl = window.location.href;
+      const loginUrl = `/login?callbackUrl=${encodeURIComponent(currentUrl)}`;
+      router.replace(loginUrl);
+      return;
+    }
+
+    // Auto-fill billing details if user is logged in
+    if (status === "authenticated" && session?.user) {
+      setAuthChecked(true);
+
+      setBillingDetails(prev => ({
+        ...prev,
+        name: session.user.name || prev.name,
+        email: session.user.email || prev.email,
+      }))
+    }
+  }, [session, status, router]);
+
+  useEffect(() => {
     const fetchOrderData = async () => {
       try {
         const response = await fetch(`/api/cart/${cartId}`);
         if (!response.ok) throw new Error("Failed to fetch order data");
         const data = await response.json();
+        console.log("Order data:", data);
         setOrderData(data);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         setError("Could not load order information. Please try again.");
       }
     };
 
-    if (cartId) {
+    if (cartId && authChecked) {
       fetchOrderData();
     }
-  }, [cartId]);
+  }, [cartId, authChecked]);
 
   // Handles Billing details form submission
   interface Address {
@@ -103,6 +130,7 @@ const CheckoutForm = () => {
   }
 
   const handleBillingSubmit = (details: BillingDetails) => {
+    if (!authChecked) return;
     setBillingDetails(details);
     setCurrentStep(1);
   };
@@ -110,8 +138,21 @@ const CheckoutForm = () => {
   // Handles Payment form submission
   const handlePaymentSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+
+    if(!authChecked) {
+      router.push("/login");
+      return;
+    }
     setLoading(true);
     setError(null);
+
+    if (status === "loading" || !authChecked) {
+      return (
+        <div className='flex items-center justify-center min-h-96'>
+          <div className='animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary'></div>
+        </div>
+      )
+    }
 
     if (!stripe || !elements) {
       setLoading(false);

@@ -10,13 +10,19 @@ const RegisterForm = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    isVendor: false,
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: { target: { name: string; value: string } }) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: {
+    target: { name: string; value: string; type: string; checked?: boolean };
+  }) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
@@ -99,6 +105,24 @@ const RegisterForm = () => {
             required
             minLength={6}
           />
+        </div>
+
+        <div className="flex items-center mt-2">
+          <input
+            type="checkbox"
+            id="isVendor"
+            name="isVendor"
+            checked={formData.isVendor}
+            onChange={handleChange}
+            className="h-4 w-4 text-amber-500 focus:ring-amber-500 broder-gray-300 rounded"
+          />
+
+          <label
+            htmlFor="isVendor"
+            className="ml-2 block text-sm text-gray-700"
+          >
+            Sign up as a vendor
+          </label>
         </div>
 
         <button
