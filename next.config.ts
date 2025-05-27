@@ -23,10 +23,6 @@ const nextConfig: NextConfig = {
   },
 
   productionBrowserSourceMaps: true,
-
-  env: {
-    NODE_ENV: "development",
-  }
 };
 
 
