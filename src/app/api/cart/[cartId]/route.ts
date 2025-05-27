@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const amount = cart.item.reduce(
-    (total, item) => total + item.product.price * item.quantity,
+    (total: number, item: { product: { price: number; }; quantity: number; }) => total + item.product.price * item.quantity,
     0
   );
 
