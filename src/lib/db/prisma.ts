@@ -1,10 +1,17 @@
 import { PrismaClient } from "../../generated/prisma";
 
 const globalForPrisma = global as unknown as {
-  prisma: PrismaClient;
+  prisma: PrismaClient | undefined;
 };
 
-const prismaBase = globalForPrisma.prisma || new PrismaClient();
+const prismaBase = globalForPrisma.prisma || new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'info', 'warn', 'error'] : ['error'],
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL
+    }
+  }
+});
 
 const prisma = prismaBase.$extends({
   query: {
