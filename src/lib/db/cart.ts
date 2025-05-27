@@ -2,7 +2,7 @@ import prisma from "@/lib/db/prisma";
 import { cookies } from "next/headers";
 import { Prisma } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import { Cart, CartItem } from "@/generated/prisma";
 
 export type CartWithProducts = Prisma.CartGetPayload<{

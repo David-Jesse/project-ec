@@ -3,21 +3,24 @@ import React from "react";
 import AnimatedSearchResults from "./AnimatedSearchResults";
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     query: string;
     page?: string;
-  };
+  }>;
 }
 
-export function generateMetadata({ searchParams: { query } }: SearchPageProps) {
+export async function generateMetadata({ searchParams }: SearchPageProps) {
+  const { query } = await searchParams;
+
   return {
     title: `Search results for "${query}" - Flowmazon`,
   };
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
-  const { query } = searchParams;
-  const page = searchParams.page || "1";
+  const resolvedSearchParams = await searchParams;
+  const { query } = resolvedSearchParams;
+  const page = resolvedSearchParams.page || "1";
   const currentPage = parseInt(page);
   const pageSize = 6;
 
@@ -60,7 +63,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         totalItemCount={totalItemCount}
         currentPage={currentPage}
         totalPages={totalPages}
-        searchParams={searchParams}
+        searchParams={resolvedSearchParams}
       />
     </div>
   );

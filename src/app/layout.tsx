@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "./Navbar/Navbar";
 import { getCart } from "@/lib/db/cart";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import Footer from "./Footer";
 import SessionProvider from "./SessionProvider";
 

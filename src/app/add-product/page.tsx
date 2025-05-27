@@ -2,7 +2,7 @@ import prisma from "@/lib/db/prisma";
 import { redirect } from "next/navigation";
 import FormSubmitButton from "@/component/FormSubmitButton";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 
 export const metadata = {
   title: "Add Product - Flowmazon",
