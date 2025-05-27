@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = global as unknown as {
   prisma: PrismaClient | undefined;
@@ -16,7 +16,7 @@ const prismaBase = globalForPrisma.prisma || new PrismaClient({
 const prisma = prismaBase.$extends({
   query: {
     cart: {
-      async update({ args, query }) {
+      async update({ args, query }: unknown) {
         args.data = { ...args.data, updatedAt: new Date() };
         return query(args);
       },
